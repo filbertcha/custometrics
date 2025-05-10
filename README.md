@@ -29,6 +29,12 @@ This website is a web application that can perform data scraping from ChatGPT us
 
 ---
 
+## 📸 Application Preview
+
+[![Watch the demo](./Screenshot%202025-05-10%20155714.png)](https://youtu.be/Q6V6PbwKN9c)
+
+---
+
 ## 📦 Installation & Running the Project
 
 ### 1️⃣ Clone the Repository
