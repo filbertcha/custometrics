@@ -1,4 +1,4 @@
-# 📊 ChatGPT Scraper Web
+# 📊 CUSTOMETRICS: ChatGPT Scraper Web
 
 This website is a web application that can perform data scraping from ChatGPT using a combination of **BeautifulSoup** and **Selenium**, supported by a **Flask** backend and an **SQLite** database. The website is also equipped with a login feature for both admin and user, and a frontend interface built with **HTML**, **CSS**, and **JavaScript**.
 
