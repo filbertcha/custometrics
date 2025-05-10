@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <style>
+      /* Base styles */
+      :root {
+        --primary-color: #6c63ff;
+        --secondary-color: #4f46e5;
+        --dark-color: #1e1e2c;
+        --light-color: #f7f7ff;
+        --accent-color: #ff6584;
+        --text-color: #f7f7ff;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+        --info-color: #3b82f6;
+      }
+
+      /* Navigation bar */
+      .navbar {
+        background-color: rgba(30, 30, 44, 0.9);
+        padding: 1rem 0;
+        backdrop-filter: blur(8px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+  
+      .navbar:hover {
+        background-color: rgba(30, 30, 44, 1);
+      }
+  
+      .navbar-brand {
+        font-family: "Montserrat", sans-serif;
+        font-weight: 800;
+        color: var(--primary-color);
+        font-size: 1.6rem;
+        transition: all 0.3s ease;
+      }
+  
+      .navbar-brand:hover {
+        color: var(--accent-color);
+        transform: scale(1.05);
+      }
+  
+      .navbar-toggler {
+        border: none;
+        color: var(--text-color);
+        font-size: 1.5rem;
+      }
+  
+      .nav-link {
+        color: var(--text-color);
+        font-weight: 500;
+        margin: 0 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        position: relative;
+      }
+  
+      .nav-link:hover {
+        color: var(--primary-color);
+        transform: translateY(-2px);
+      }
+  
+      .nav-link.active {
+        color: var(--primary-color);
+        background-color: rgba(108, 99, 255, 0.1);
+        font-weight: 600;
+      }
+  
+      .nav-link.active::after {
+        content: "";
+        position: absolute;
+        width: 50%;
+        height: 3px;
+        background-color: var(--primary-color);
+        bottom: 0;
+        left: 25%;
+        border-radius: 3px;
+        transition: all 0.3s ease;
+      }
+    </style>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('home_page') }}">
+          <i class="fas fa-spider me-2"></i>
+          <span>CustoMetrics</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('home_page') }}">
+                <i class="fas fa-home me-1"></i> Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('my_data_page') }}">
+                <i class="fas fa-list me-1"></i> Riwayat Saya
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('pengisian_link_page') }}">
+                <i class="fas fa-link me-1"></i> Form Isi Link
+              </a>
+            </li>
+          </ul>
+          {% if current_user.username == "admin" %}
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a
+                class="nav-link admin-link"
+                href="{{ url_for('all_data_page') }}"
+              >
+                <i class="fas fa-database me-1"></i> List Seluruh Data
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link user-welcome">
+                <i class="fas fa-crown me-1"></i> Welcome, {{
+                current_user.username }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link logout-btn"
+                href="{{ url_for('logout_page') }}"
+              >
+                <i class="fas fa-sign-out-alt me-1"></i> Logout
+              </a>
+            </li>
+          </ul>
+          {% endif %} {% if current_user.is_authenticated and
+          current_user.username != "admin" %}
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link user-welcome">
+                <i class="fas fa-user me-1"></i> Welcome, {{
+                current_user.username }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link logout-btn"
+                href="{{ url_for('logout_page') }}"
+              >
+                <i class="fas fa-sign-out-alt me-1"></i> Logout
+              </a>
+            </li>
+          </ul>
+          {% else %} {% if not current_user.is_authenticated %}
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link login-btn" href="{{ url_for('login_page') }}">
+                <i class="fas fa-sign-in-alt me-1"></i> Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link register-btn"
+                href="{{ url_for('register_page') }}"
+              >
+                <i class="fas fa-user-plus me-1"></i> Register
+              </a>
+            </li>
+          </ul>
+          {% endif %} {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="flash-container">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert alert-{{ category }} alert-dismissible fade show"
+        role="alert"
+      >
+        <div class="alert-icon">
+          {% if category == 'success' %}
+          <i class="fas fa-check-circle"></i>
+          {% elif category == 'danger' %}
+          <i class="fas fa-exclamation-circle"></i>
+          {% elif category == 'warning' %}
+          <i class="fas fa-exclamation-triangle"></i>
+          {% else %}
+          <i class="fas fa-info-circle"></i>
+          {% endif %}
+        </div>
+        <div class="alert-content">{{ message }}</div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
+
+    <main class="main-content">{% block content %} {% endblock %}</main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <h5><i class="fas fa-spider me-2"></i> CustoMetrics</h5>
+            <p>
+              Your reliable web scraping solution for data extraction and
+              analysis.
+            </p>
+          </div>
+          <div class="col-md-3">
+            <h5>Quick Links</h5>
+            <ul class="footer-links">
+              <li><a href="{{ url_for('home_page') }}">Home</a></li>
+              <li><a href="{{ url_for('my_data_page') }}">Riwayat Saya</a></li>
+              <li>
+                <a href="{{ url_for('pengisian_link_page') }}">Form Isi Link</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-3">
+            <h5>Contact</h5>
+            <ul class="footer-links">
+              <li>
+                <i class="fas fa-envelope me-2"></i> custometrics@gmail.com
+              </li>
+              <li><i class="fas fa-phone me-2"></i> +123 456 7890</li>
+            </ul>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 CustoMetrics. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+      // Add active class to current nav item
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentLocation = window.location.pathname;
+        const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
+
+        navLinks.forEach((link) => {
+          const linkPath = new URL(link.href).pathname;
+          if (currentLocation === linkPath) {
+            link.classList.add("active");
+          }
+        });
+
+        // Animated alerts
+        const alerts = document.querySelectorAll(".alert");
+        alerts.forEach((alert) => {
+          setTimeout(() => {
+            alert.classList.add("show-alert");
+          }, 100);
+
+          setTimeout(() => {
+            alert.classList.remove("show-alert");
+            setTimeout(() => {
+              alert.remove();
+            }, 500);
+          }, 5000);
+        });
+      });
+    </script>
+  </body>
+  <style>
+    /* Base styles */
+    :root {
+      --primary-color: #6c63ff;
+      --secondary-color: #4f46e5;
+      --dark-color: #1e1e2c;
+      --light-color: #f7f7ff;
+      --accent-color: #ff6584;
+      --text-color: #f7f7ff;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --info-color: #3b82f6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background-color: var(--dark-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Navigation bar */
+    .navbar {
+      background-color: rgba(30, 30, 44, 0.9);
+      padding: 1rem 0;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar:hover {
+      background-color: rgba(30, 30, 44, 1);
+    }
+
+    .navbar-brand {
+      font-family: "Montserrat", sans-serif;
+      font-weight: 800;
+      color: var(--primary-color);
+      font-size: 1.6rem;
+      transition: all 0.3s ease;
+    }
+
+    .navbar-brand:hover {
+      color: var(--accent-color);
+      transform: scale(1.05);
+    }
+
+    .navbar-toggler {
+      border: none;
+      color: var(--text-color);
+      font-size: 1.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-color);
+      font-weight: 500;
+      margin: 0 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .navbar-nav .nav-link.active {
+      color: var(--primary-color);
+      background-color: rgba(108, 99, 255, 0.1);
+      font-weight: 600;
+    }
+
+    .navbar-nav .nav-link.active::after {
+      content: "";
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background-color: var(--primary-color);
+      bottom: 0;
+      left: 25%;
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+
+    .admin-link {
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    .admin-link:hover {
+      color: var(--accent-color);
+      background-color: rgba(255, 101, 132, 0.1);
+    }
+
+    .user-welcome {
+      font-weight: 600;
+      color: var(--text-color);
+      cursor: default;
+    }
+
+    .login-btn,
+    .register-btn {
+      padding: 0.5rem 1.2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .login-btn {
+      background-color: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .login-btn:hover {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+    }
+
+    .register-btn {
+      background-color: var(--primary-color);
+      color: var(--light-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    .register-btn:hover {
+      background-color: var(--secondary-color);
+      border-color: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+    }
+
+    .logout-btn {
+      color: var(--danger-color);
+    }
+
+    .logout-btn:hover {
+      color: var(--light-color);
+      background-color: var(--danger-color);
+    }
+
+    /* Flash messages */
+    .flash-container {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 1050;
+      max-width: 350px;
+    }
+
+    .alert {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    .alert.show-alert {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .alert-success {
+      background-color: rgba(16, 185, 129, 0.2);
+      color: var(--success-color);
+      border-left: 4px solid var(--success-color);
+    }
+
+    .alert-danger {
+      background-color: rgba(239, 68, 68, 0.2);
+      color: var(--danger-color);
+      border-left: 4px solid var(--danger-color);
+    }
+
+    .alert-warning {
+      background-color: rgba(245, 158, 11, 0.2);
+      color: var(--warning-color);
+      border-left: 4px solid var(--warning-color);
+    }
+
+    .alert-info {
+      background-color: rgba(59, 130, 246, 0.2);
+      color: var(--info-color);
+      border-left: 4px solid var(--info-color);
+    }
+
+    .alert-icon {
+      margin-right: 1rem;
+      font-size: 1.5rem;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .btn-close {
+      filter: invert(1);
+      opacity: 0.5;
+    }
+
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: 1rem 0;
+    }
+
+    /* Footer */
+    .footer {
+      background-color: rgba(26, 26, 38, 0.95);
+      padding: 3rem 0 1rem;
+      margin-top: 2rem;
+    }
+
+    .footer h5 {
+      color: var(--primary-color);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .footer h5::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -8px;
+      width: 40px;
+      height: 3px;
+      background-color: var(--primary-color);
+      border-radius: 2px;
+    }
+
+    .footer p {
+      color: rgba(247, 247, 255, 0.7);
+      line-height: 1.6;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 1rem;
+    }
+
+    .footer-links a {
+      color: rgba(247, 247, 255, 0.7);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--primary-color);
+      padding-left: 5px;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 2rem;
+      margin-top: 2rem;
+      border-top: 1px solid rgba(247, 247, 255, 0.1);
+      color: rgba(247, 247, 255, 0.5);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .navbar-brand {
+        font-size: 1.4rem;
+      }
+
+      .flash-container {
+        width: 90%;
+        right: 5%;
+        max-width: unset;
+      }
+    }
+  </style>
+</html>

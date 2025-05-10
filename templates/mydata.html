@@ -1,0 +1,54 @@
+{% extends 'base.html' %} {% block title %}My Scraped Data{% endblock %} {%
+block content %}
+<div class="container">
+  <h1 class="mb-4">Scraped Data for {{ current_user.username }}</h1>
+
+  <div class="d-grid gap-2 d-md-block mb-3">
+    <a href="{{ url_for('pengisian_link_page') }}" class="btn btn-primary"
+      >Submit New Link</a
+    >
+    <a href="{{ url_for('export_csv') }}" class="btn btn-success">Export CSV</a>
+    <a href="{{ url_for('export_excel') }}" class="btn btn-success"
+      >Export Excel</a
+    >
+  </div>
+
+  {% if data_list %}
+  <div class="row">
+    {% for data in data_list %}
+    <div class="col-md-12 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <strong>{{ data.created_at.strftime('%Y-%m-%d %H:%M') }}</strong> -
+          <a href="{{ data.link }}" target="_blank">{{ data.link }}</a>
+        </div>
+        <div class="card-footer text-muted">
+          Dibuat oleh: {{ data.owner_username }}
+          <br />
+          <br />
+          <div class="btn-group">
+            <a
+              href="{{ url_for('view_data_detail', data_id=data.id) }}"
+              class="btn btn-outline-primary"
+              >View Raw Data</a
+            >
+            <a
+              href="{{ url_for('view_data_detail_preprocessed', data_id=data.id) }}"
+              class="btn btn-outline-primary"
+              >View Preprocessed Data</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info">
+    You don't have any scraped data yet.
+    <a href="{{ url_for('pengisian_link_page') }}">Submit a link</a> to get
+    started.
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

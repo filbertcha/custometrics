@@ -1,0 +1,62 @@
+{% extends 'base.html' %} {% block title %}Data Detail Preprocessing{% endblock
+%} {% block content %}
+<div class="container">
+  <div class="mb-3">
+    <a href="{{ url_for('home_page') }}" class="btn btn-secondary"
+      >< Back to Home</a
+    >
+  </div>
+
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        <h2>Data Detail (Preprocessed)</h2>
+        <p class="text-muted">
+          Scraped on {{ data.created_at.strftime('%Y-%m-%d %H:%M') }}
+        </p>
+      </div>
+      <div class="btn-group">
+        <a
+          href="{{ url_for('view_data_detail', data_id=data.id) }}"
+          class="btn btn-outline-primary"
+          >View Raw Data</a
+        >
+        <a
+          href="{{ url_for('view_data_detail_preprocessed', data_id=data.id) }}"
+          class="btn btn-primary active"
+          >View Preprocessed Data</a
+        >
+      </div>
+    </div>
+    <div class="card-body">
+      <h4>Link</h4>
+      <p><a href="{{ data.link }}" target="_blank">{{ data.link }}</a></p>
+
+      <div class="row mt-4">
+        <div class="col-md-6">
+          <h4>Prompts (Preprocessed)</h4>
+          <div
+            class="prompt-container p-3 bg-light rounded"
+            style="white-space: pre-line; max-height: 600px; overflow-y: auto"
+          >
+            {{ data.prompt_preprocessing }}
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <h4>Responses (Preprocessed)</h4>
+          <div
+            class="response-container p-3 bg-light rounded"
+            style="white-space: pre-line; max-height: 600px; overflow-y: auto"
+          >
+            {{ data.response_preprocessing }}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <p>Created by: {{ data.owner_username }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
